@@ -1,0 +1,50 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand: #FD366E;
+  --color-brand-hover: #E0285D;
+  --color-surface: #FFFFFF;
+  --color-background: #FAFAFB;
+  --color-text-main: #2D2D31;
+  --color-text-muted: #56565C;
+  --color-border: #EDEDF0;
+  
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-display: 'Poppins', sans-serif;
+  --font-mono: 'Fira Code', monospace;
+
+  --shadow-premium: 0 10px 40px -10px rgba(0, 0, 0, 0.05);
+  --shadow-hover: 0 20px 50px -15px rgba(253, 54, 110, 0.15);
+}
+
+@layer base {
+  body {
+    @apply bg-[family-name:var(--color-background)] text-[family-name:var(--color-text-muted)] font-sans antialiased;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-white/80 backdrop-blur-md border border-white/20 shadow-premium rounded-2xl;
+  }
+  
+  .btn-primary {
+    @apply bg-brand hover:bg-brand-hover text-white px-6 py-2.5 rounded-xl font-medium transition-all duration-300 shadow-sm hover:shadow-brand/20 active:scale-95 flex items-center justify-center gap-2;
+  }
+
+  .btn-outline {
+    @apply border border-border hover:border-brand hover:text-brand px-6 py-2.5 rounded-xl font-medium transition-all duration-300 flex items-center justify-center gap-2;
+  }
+
+  .input-field {
+    @apply bg-white border border-border rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand transition-all duration-300;
+  }
+}
+
+/* Custom background pattern */
+.checker-background {
+    background-image: 
+        linear-gradient(rgba(235, 235, 235, 0.2) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(235, 235, 235, 0.2) 1px, transparent 1px);
+    background-size: 20px 20px;
+}
