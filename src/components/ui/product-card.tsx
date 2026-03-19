@@ -58,10 +58,12 @@ export const ProductCard = ({ product }: ProductCardProps) => {
         <div className="group bg-white rounded-2xl border border-border/50 hover:border-brand/20 transition-all duration-500 hover:shadow-glow overflow-hidden">
             {/* Image Section */}
             <div className="relative aspect-square overflow-hidden bg-[#f3f3f5]/30">
-                <img 
+                <Image 
                     src={productImage} 
                     alt={product.name}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                    className="object-cover transition-transform duration-700 group-hover:scale-110"
                 />
                 
                 {/* Floating Actions */}
