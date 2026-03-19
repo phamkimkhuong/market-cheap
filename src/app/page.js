@@ -15,32 +15,35 @@ export default function Home() {
     return (
         <div className="space-y-12">
             {/* Hero Section */}
-            <section className="relative overflow-hidden rounded-[2.5rem] bg-brand/5 border border-brand/10 p-8 sm:p-16">
-                <div className="relative z-10 max-w-2xl space-y-6">
-                    <div className="inline-flex items-center gap-2 bg-brand/10 text-brand px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider">
+            <section className="relative overflow-hidden rounded-[2.5rem] bg-brand/5 border border-brand/10 p-8 sm:p-20">
+                <div className="relative z-10 max-w-2xl space-y-8">
+                    <div className="inline-flex items-center gap-2 bg-brand/10 text-brand px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider backdrop-blur-md">
                         <Sparkles size={14} />
-                        New Season Arrival
+                        2025 Marketplace Edition
                     </div>
-                    <h1 className="text-4xl sm:text-6xl font-display font-black text-text-main leading-[1.1]">
-                        Elevate Your <br />
-                        <span className="text-brand">Digital Lifestyle</span>
+                    <h1 className="text-5xl sm:text-7xl font-display font-black text-text-main leading-[1.05]">
+                        The Future of <br />
+                        <span className="text-brand">Shopping is Orange.</span>
                     </h1>
-                    <p className="text-lg text-text-muted">
-                        Discover premium products from verified shops. Quality meets convenience on the most advanced marketplace.
+                    <p className="text-xl text-text-muted max-w-lg leading-relaxed">
+                        Experience a vibrant marketplace where quality meets speed. From local artisans to global brands, everything in one click.
                     </p>
-                    <div className="flex items-center gap-4">
-                        <button className="btn-primary">
-                            Shop Now
-                            <ArrowRight size={18} />
+                    <div className="flex flex-wrap items-center gap-5 pt-4">
+                        <button className="btn-primary shadow-glow h-14 px-10">
+                            Shop Collections
+                            <ArrowRight size={20} />
                         </button>
-                        <button className="btn-outline border-brand/20">
-                            Explore Collections
+                        <button className="btn-outline h-14 px-10">
+                            Our Story
                         </button>
                     </div>
                 </div>
 
-                {/* Decorative background element */}
-                <div className="absolute top-1/2 right-0 -translate-y-1/2 translate-x-1/4 w-[40rem] h-[40rem] bg-brand/10 rounded-full blur-[100px]" />
+                {/* Decorative background elements */}
+                <div className="absolute -top-24 -right-24 w-[35rem] h-[35rem] bg-brand/20 rounded-full blur-[120px]" />
+                <div className="absolute top-1/2 right-10 -translate-y-1/2 w-96 h-96 bg-brand-light rounded-full border border-brand/5 flex items-center justify-center p-12">
+                     <div className="w-full h-full bg-brand/10 rounded-full blur-2xl" />
+                </div>
             </section>
 
             {/* Featured Section */}

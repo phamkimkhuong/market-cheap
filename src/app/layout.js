@@ -11,23 +11,23 @@ import { Navbar } from "@/components/ui/navbar";
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <link rel="icon" href="/appwrite.svg" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Fira+Code&family=Inter:opsz,wght@14..32,100..900&family=Poppins:wght@300;400;500;600;700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:opsz,wght@14..32,100..900&display=swap"
           rel="stylesheet"
         />
         <link rel="icon" type="image/svg+xml" href="/appwrite.svg" />
       </head>
-      <body className={"bg-[#FAFAFB] font-[Inter] text-sm text-[#56565C] min-h-screen pt-20 overflow-x-hidden"}>
+      <body className="bg-bg-main text-text-main font-sans min-h-screen pt-20 overflow-x-hidden antialiased">
         <QueryProvider>
           <Navbar />
-          <main className="container mx-auto px-4 py-8">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
             {children}
-          </main>
+          </div>
           <ToastContainer />
         </QueryProvider>
       </body>

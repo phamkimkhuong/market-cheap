@@ -55,7 +55,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
     const productImage = product.images?.[0] || `https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=600&auto=format&fit=crop`;
 
     return (
-        <div className="group bg-white rounded-2xl border border-border/50 hover:border-brand/20 transition-all duration-500 hover:shadow-premium overflow-hidden">
+        <div className="group bg-white rounded-2xl border border-border/50 hover:border-brand/20 transition-all duration-500 hover:shadow-glow overflow-hidden">
             {/* Image Section */}
             <div className="relative aspect-square overflow-hidden bg-[#f3f3f5]/30">
                 <img 

@@ -1,43 +1,43 @@
 @import "tailwindcss";
 
 @theme {
-  --color-brand: #FD366E;
-  --color-brand-hover: #E0285D;
-  --color-surface: #FFFFFF;
-  --color-background: #FAFAFB;
-  --color-text-main: #2D2D31;
-  --color-text-muted: #56565C;
-  --color-border: #EDEDF0;
+  --color-brand: hsl(24, 100%, 50%); /* Vibrant Orange */
+  --color-brand-hover: hsl(24, 100%, 45%);
+  --color-brand-light: hsl(24, 100%, 50%, 0.1);
+  --color-text-main: hsl(222, 47%, 11%); /* Midnight Slate */
+  --color-text-muted: hsl(215, 16%, 47%);
+  --color-bg-main: hsl(30, 20%, 98%); /* Soft Cream Background */
+  --color-surface: hsl(0, 0%, 100%);
+  --color-border: hsl(214, 32%, 91%);
   
   --font-sans: 'Inter', system-ui, sans-serif;
   --font-display: 'Poppins', sans-serif;
   --font-mono: 'Fira Code', monospace;
 
-  --shadow-premium: 0 10px 40px -10px rgba(0, 0, 0, 0.05);
-  --shadow-hover: 0 20px 50px -15px rgba(253, 54, 110, 0.15);
+  --shadow-premium: 0 20px 40px -15px rgba(0, 0, 0, 0.05);
+  --shadow-glow: 0 0 20px rgba(255, 107, 0, 0.2);
 }
 
 @layer base {
   body {
-    @apply bg-[family-name:var(--color-background)] text-[family-name:var(--color-text-muted)] font-sans antialiased;
+    @apply bg-bg-main text-text-main font-sans selection:bg-brand/30 antialiased;
   }
-}
 
-@layer components {
   .glass-card {
-    @apply bg-white/80 backdrop-blur-md border border-white/20 shadow-premium rounded-2xl;
+    @apply bg-surface/80 backdrop-blur-xl border border-white/40 shadow-premium rounded-3xl transition-all duration-300;
   }
-  
+
+  /* Orange Premium Button */
   .btn-primary {
-    @apply bg-brand hover:bg-brand-hover text-white px-6 py-2.5 rounded-xl font-medium transition-all duration-300 shadow-sm hover:shadow-brand/20 active:scale-95 flex items-center justify-center gap-2;
+    @apply bg-brand text-white px-6 py-3 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-brand-hover hover:shadow-glow transition-all active:scale-95 disabled:opacity-50;
   }
 
   .btn-outline {
-    @apply border border-border hover:border-brand hover:text-brand px-6 py-2.5 rounded-xl font-medium transition-all duration-300 flex items-center justify-center gap-2;
+    @apply border-2 border-brand/20 text-brand px-6 py-3 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-brand-light transition-all active:scale-95;
   }
 
   .input-field {
-    @apply bg-white border border-border rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand transition-all duration-300;
+    @apply w-full bg-white border border-border px-4 py-3 rounded-2xl outline-none focus:border-brand focus:ring-4 focus:ring-brand-light transition-all;
   }
 }
 
