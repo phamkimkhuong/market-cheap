@@ -1,6 +1,6 @@
 'use client';
 
-import { ShoppingCart, Heart, ExternalLink, Star } from 'lucide-react';
+import { ShoppingCart, Heart, Star, CheckCircle } from 'lucide-react';
 import Image from 'next/image';
 import { type Product } from '@/types/models';
 import { useCartStore } from '@/store/use-cart-store';
@@ -13,7 +13,8 @@ interface ProductCardProps {
 }
 
 /**
- * Premium Product Card component.
+ * Professional eCommerce Product Card.
+ * Design inspired by TGDĐ/BHX with rounded corners, clear pricing, and trust signals.
  */
 export const ProductCard = ({ product }: ProductCardProps) => {
     const { user } = useAuth();
@@ -21,17 +22,19 @@ export const ProductCard = ({ product }: ProductCardProps) => {
     const { addItem } = useCartStore();
     const syncCartItem = useSyncCartItem();
 
-    const handleAddToCart = async () => {
+    const handleAddToCart = async (e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+
         if (!user) {
-            addToast("Please login to add to cart!", "info");
+            addToast("Vui lòng đăng nhập để thêm vào giỏ hàng!", "info");
             return;
         }
 
-        // Add to local state for high speed UI
+        // Optimistic Update
         addItem(product, 1);
-        addToast(`Added ${product.name} to cart`, "success");
+        addToast(`Đã thêm ${product.name} vào giỏ`, "success");
 
-        // Background sync with database
         try {
             await syncCartItem.mutateAsync({
                 userId: user.$id,
@@ -41,78 +44,83 @@ export const ProductCard = ({ product }: ProductCardProps) => {
             });
         } catch (err) {
             console.error('Failed to sync cart:', err);
-            // Optional: rollback or update toast if sync fails
         }
     };
 
-    // Format price in VND (assuming integer is in VNĐ)
     const formattedPrice = new Intl.NumberFormat('vi-VN', {
         style: 'currency',
         currency: 'VND',
     }).format(product.price);
 
-    // Get the first image or a placeholder
     const productImage = product.images?.[0] || `https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=600&auto=format&fit=crop`;
 
     return (
-        <div className="group bg-white rounded-2xl border border-border/50 hover:border-brand/20 transition-all duration-500 hover:shadow-glow overflow-hidden">
+        <div className="group glass-card border-none hover:translate-y-[-8px] transition-all duration-500 overflow-hidden relative">
+            {/* Trust Badge */}
+            <div className="absolute top-4 left-4 z-10 flex flex-col gap-2">
+                <div className="bg-brand text-white text-[10px] font-black px-2.5 py-1 rounded-full uppercase tracking-tighter shadow-glow">
+                    FREESHIP
+                </div>
+                {product.stock < 10 && (
+                    <div className="bg-[#ff3b30] text-white text-[10px] font-black px-2.5 py-1 rounded-full uppercase tracking-tighter shadow-lg">
+                        Sắp hết hàng
+                    </div>
+                )}
+            </div>
+
+            {/* Like Button */}
+            <button className="absolute top-4 right-4 z-10 w-9 h-9 bg-white/80 backdrop-blur-md rounded-xl flex items-center justify-center text-text-muted hover:text-red-500 hover:bg-white transition-all shadow-premium">
+                <Heart size={16} strokeWidth={2.5} />
+            </button>
+
             {/* Image Section */}
-            <div className="relative aspect-square overflow-hidden bg-[#f3f3f5]/30">
+            <div className="relative aspect-square overflow-hidden bg-brand-soft/50">
                 <Image 
                     src={productImage} 
                     alt={product.name}
                     fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-                    className="object-cover transition-transform duration-700 group-hover:scale-110"
+                    className="object-cover transition-transform duration-1000 group-hover:scale-110"
                 />
-                
-                {/* Floating Actions */}
-                <div className="absolute top-3 right-3 flex flex-col gap-2 translate-x-12 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300">
-                    <button className="w-10 h-10 bg-white rounded-xl shadow-premium flex items-center justify-center text-text-muted hover:text-red-500 transition-colors">
-                        <Heart size={18} />
-                    </button>
-                </div>
-
-                {/* Badge (Optional) */}
-                {product.stock < 5 && (
-                    <div className="absolute top-3 left-3 px-3 py-1 bg-brand text-white text-[10px] font-bold rounded-lg uppercase tracking-wider">
-                        Low Stock
-                    </div>
-                )}
             </div>
 
-            {/* Content Section */}
-            <div className="p-5">
-                <div className="flex items-center justify-between mb-2">
-                    <span className="text-[11px] font-bold uppercase tracking-widest text-text-muted/60">
-                        {product.shop_id.substring(0, 8)}...
+            {/* Product Details */}
+            <div className="p-5 space-y-3">
+                <div className="flex items-center gap-1.5 overflow-hidden whitespace-nowrap">
+                     <span className="flex items-center gap-0.5 text-yellow-500">
+                        <Star size={12} fill="currentColor" />
+                        <span className="text-[11px] font-black text-text-main">4.9</span>
                     </span>
-                    <div className="flex items-center text-yellow-400 gap-1 scale-90">
-                        <Star size={14} fill="currentColor" />
-                        <span className="text-xs text-text-muted font-medium">4.8</span>
+                    <span className="h-1 w-1 rounded-full bg-border" />
+                    <span className="text-[11px] font-bold text-text-light">Đã bán 1.2k+</span>
+                </div>
+
+                <div className="space-y-1">
+                    <h3 className="text-sm font-bold text-text-main leading-tight line-clamp-2 min-h-[40px] group-hover:text-brand transition-colors">
+                        {product.name}
+                    </h3>
+                    <div className="flex items-center gap-1">
+                        <CheckCircle size={10} className="text-success" />
+                        <span className="text-[10px] font-bold text-success uppercase">Chính hãng</span>
                     </div>
                 </div>
 
-                <h3 className="text-text-main font-bold truncate group-hover:text-brand transition-colors">
-                    {product.name}
-                </h3>
-                
-                <p className="text-xs text-text-muted mt-1 mb-4 line-clamp-2 min-h-[2.5rem]">
-                    {product.description || 'No description provided.'}
-                </p>
-
-                <div className="flex items-center justify-between gap-4 mt-auto">
-                    <div>
-                        <span className="text-lg font-display font-black text-brand tracking-tight">
+                <div className="flex items-end justify-between gap-2 pt-2">
+                    <div className="flex flex-col">
+                        <span className="text-[11px] font-bold text-text-light line-through opacity-60">
+                            {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price * 1.2)}
+                        </span>
+                        <span className="text-[17px] font-black text-brand tracking-tighter leading-none">
                             {formattedPrice}
                         </span>
                     </div>
 
                     <button 
                         onClick={handleAddToCart}
-                        className="p-3 bg-brand text-white rounded-xl shadow-brand/10 hover:shadow-brand/25 hover:bg-brand-hover active:scale-90 transition-all"
+                        className="w-11 h-11 bg-brand text-white rounded-[18px] flex items-center justify-center shadow-glow hover:bg-brand-hover hover:scale-110 active:scale-95 transition-all"
+                        title="Thêm vào giỏ"
                     >
-                        <ShoppingCart size={18} />
+                        <ShoppingCart size={20} strokeWidth={2.5} />
                     </button>
                 </div>
             </div>

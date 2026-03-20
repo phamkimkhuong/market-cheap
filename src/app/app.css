@@ -1,50 +1,81 @@
 @import "tailwindcss";
 
 @theme {
-  --color-brand: hsl(24, 100%, 50%); /* Vibrant Orange */
+  --color-brand: hsl(24, 100%, 50%); /* Vibrant Orange - TGDĐ Style */
   --color-brand-hover: hsl(24, 100%, 45%);
   --color-brand-light: hsl(24, 100%, 50%, 0.1);
+  --color-brand-soft: hsl(24, 100%, 96%);
+  
   --color-text-main: hsl(222, 47%, 11%); /* Midnight Slate */
   --color-text-muted: hsl(215, 16%, 47%);
+  --color-text-light: hsl(215, 20%, 65%);
+  
   --color-bg-main: hsl(30, 20%, 98%); /* Soft Cream Background */
   --color-surface: hsl(0, 0%, 100%);
   --color-border: hsl(214, 32%, 91%);
+  --color-success: hsl(142, 70%, 45%);
   
   --font-sans: 'Inter', system-ui, sans-serif;
-  --font-display: 'Poppins', sans-serif;
+  --font-display: 'Plus Jakarta Sans', 'Poppins', sans-serif;
   --font-mono: 'Fira Code', monospace;
 
   --shadow-premium: 0 20px 40px -15px rgba(0, 0, 0, 0.05);
-  --shadow-glow: 0 0 20px rgba(255, 107, 0, 0.2);
+  --shadow-glow: 0 10px 25px -5px rgba(255, 107, 0, 0.3);
+  --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.01);
+  
+  --radius-pro-xl: 24px;
+  --radius-pro-2xl: 32px;
 }
 
 @layer base {
   body {
-    @apply bg-bg-main text-text-main font-sans selection:bg-brand/30 antialiased;
+    @apply bg-bg-main text-text-main font-sans selection:bg-brand/30 antialiased overflow-x-hidden;
+  }
+
+  /* Glassmorphism Panels */
+  .glass-panel {
+    @apply bg-white/70 backdrop-blur-xl border border-white/40 shadow-premium transition-all duration-300;
   }
 
   .glass-card {
-    @apply bg-surface/80 backdrop-blur-xl border border-white/40 shadow-premium rounded-3xl transition-all duration-300;
+    @apply bg-surface/80 backdrop-blur-lg border border-white/40 shadow-premium rounded-[var(--radius-pro-xl)] transition-all duration-300;
   }
 
-  /* Orange Premium Button */
+  /* Premium Buttons */
   .btn-primary {
-    @apply bg-brand text-white px-6 py-3 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-brand-hover hover:shadow-glow transition-all active:scale-95 disabled:opacity-50;
+    @apply bg-brand text-white px-6 py-3 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-brand-hover hover:shadow-glow transition-all active:scale-[0.98] disabled:opacity-50;
   }
 
   .btn-outline {
-    @apply border-2 border-brand/20 text-brand px-6 py-3 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-brand-light transition-all active:scale-95;
+    @apply border-2 border-brand/20 text-brand px-6 py-3 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-brand-soft hover:border-brand/40 transition-all active:scale-[0.98];
   }
 
+  .btn-ghost {
+    @apply p-3 bg-brand-soft/50 text-text-main hover:bg-brand-soft hover:text-brand rounded-xl transition-all active:scale-95;
+  }
+
+  /* Form Elements */
   .input-field {
     @apply w-full bg-white border border-border px-4 py-3 rounded-2xl outline-none focus:border-brand focus:ring-4 focus:ring-brand-light transition-all;
+  }
+
+  /* Content Containers */
+  .section-container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
   }
 }
 
 /* Custom background pattern */
-.checker-background {
-    background-image: 
-        linear-gradient(rgba(235, 235, 235, 0.2) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(235, 235, 235, 0.2) 1px, transparent 1px);
-    background-size: 20px 20px;
+.dots-pattern {
+    background-image: radial-gradient(circle, #000000 1px, transparent 1px);
+    background-size: 24px 24px;
+    opacity: 0.03;
+}
+
+.hero-gradient {
+    background: linear-gradient(135deg, hsl(24, 100%, 50%) 0%, hsl(15, 100%, 55%) 100%);
+}
+
+.text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-brand to-brand-hover;
 }
