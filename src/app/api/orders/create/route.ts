@@ -4,6 +4,7 @@ import { CreateOrderRequestSchema } from '@/types/api';
 import { parseOrThrow } from '@/services/repositories/validation';
 import { getRequiredHeader } from '@/services/repositories/config';
 import { getErrorMessage } from '@/utils/error';
+import { getServerAuthUser } from '@/services/api/server-auth';
 
 const processedRequestIds = new Set<string>();
 
@@ -19,9 +20,10 @@ export async function POST(request: NextRequest) {
             await request.json(),
             'api.orders.create.request'
         );
+        const sessionUser = await getServerAuthUser();
 
         const result = await checkoutRepository.createOrder({
-            userId: payload.userId,
+            userId: sessionUser.$id,
             address: payload.address,
             idempotencyKey,
             items: payload.items,

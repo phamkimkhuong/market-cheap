@@ -36,13 +36,11 @@ export const useSyncCartItem = () => {
 
     return useMutation({
         mutationFn: async ({
-            userId,
             productId,
             quantity,
             shop_id,
             idempotencyKey,
         }: {
-            userId: string;
             productId: string;
             quantity: number;
             shop_id: string;
@@ -55,7 +53,6 @@ export const useSyncCartItem = () => {
                     'x-idempotency-key': idempotencyKey,
                 },
                 body: JSON.stringify({
-                    userId,
                     productId,
                     quantity,
                     shopId: shop_id,
@@ -67,8 +64,8 @@ export const useSyncCartItem = () => {
             }
             return await response.json();
         },
-        onSuccess: (_, variables) => {
-            queryClient.invalidateQueries({ queryKey: ['db-cart', variables.userId] });
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['db-cart'] });
         },
     });
 };

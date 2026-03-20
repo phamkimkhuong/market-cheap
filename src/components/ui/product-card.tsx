@@ -40,7 +40,6 @@ export const ProductCard = ({ product }: ProductCardProps) => {
 
         try {
             await syncCartItem.mutateAsync({
-                userId: user.$id,
                 productId: product.$id,
                 quantity: nextQuantity,
                 shop_id: product.shop_id,

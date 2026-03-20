@@ -1,7 +1,6 @@
 import { z } from 'zod';
 
 export const SyncCartRequestSchema = z.object({
-    userId: z.string().min(1),
     productId: z.string().min(1),
     quantity: z.number().int().min(1),
     shopId: z.string().min(1),
@@ -10,7 +9,6 @@ export const SyncCartRequestSchema = z.object({
 export type SyncCartRequest = z.infer<typeof SyncCartRequestSchema>;
 
 export const CreateOrderRequestSchema = z.object({
-    userId: z.string().min(1),
     address: z.string().min(1),
     items: z.array(
         z.object({
