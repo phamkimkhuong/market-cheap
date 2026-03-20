@@ -88,6 +88,11 @@ export const useAuth = () => {
         },
     });
 
+    const loginWithGoogle = () => {
+        logger.info('Redirecting to Google OAuth...');
+        authRepository.loginWithGoogle();
+    };
+
     return {
         user,
         isLoading,
@@ -98,5 +103,6 @@ export const useAuth = () => {
         register: register.mutateAsync,
         isRegistering: register.isPending,
         logout: logout.mutateAsync,
+        loginWithGoogle,
     };
 };

@@ -1,4 +1,4 @@
-import { ID } from 'appwrite';
+import { ID, OAuthProvider } from 'appwrite';
 import { account } from '@/services/api/client';
 import { UserSchema, type AuthUser, type LoginCredentials, type RegisterCredentials } from '@/types/auth';
 import { UnauthorizedError } from '@/types/errors';
@@ -41,5 +41,14 @@ export const authRepository = {
             }
             throw error;
         }
+    },
+
+    loginWithGoogle(): void {
+        const origin = window.location.origin;
+        account.createOAuth2Session(
+            OAuthProvider.Google,
+            `${origin}/`,
+            `${origin}/login?oauth=failed`
+        );
     },
 };

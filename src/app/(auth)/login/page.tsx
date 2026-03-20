@@ -5,9 +5,9 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Mail, Lock, Eye, EyeOff, LogIn, Chrome, Apple, AlertCircle, Sparkles } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { getErrorMessage } from '@/utils/error';
 
 // Validation Schema
@@ -19,10 +19,17 @@ const loginSchema = z.object({
 type LoginFormValues = z.infer<typeof loginSchema>;
 
 export default function LoginPage() {
-    const { login, isLoggingIn } = useAuth();
+    const { login, loginWithGoogle, isLoggingIn } = useAuth();
     const router = useRouter();
+    const searchParams = useSearchParams();
     const [showPassword, setShowPassword] = useState(false);
     const [authError, setAuthError] = useState<string | null>(null);
+
+    useEffect(() => {
+        if (searchParams.get('oauth') === 'failed') {
+            setAuthError('Đăng nhập Google thất bại. Vui lòng thử lại.');
+        }
+    }, [searchParams]);
 
     const { register, handleSubmit, formState: { errors } } = useForm<LoginFormValues>({
         resolver: zodResolver(loginSchema),
@@ -144,7 +151,14 @@ export default function LoginPage() {
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
-                     <button type="button" className="btn-outline h-14 border-brand/10 bg-white/50 hover:bg-white hover:border-brand/40">
+                     <button
+                        type="button"
+                        onClick={() => {
+                            setAuthError(null);
+                            loginWithGoogle();
+                        }}
+                        className="btn-outline h-14 border-brand/10 bg-white/50 hover:bg-white hover:border-brand/40"
+                     >
                         <Chrome size={20} />
                         Google
                      </button>
