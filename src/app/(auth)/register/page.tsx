@@ -8,6 +8,7 @@ import { User, Mail, Lock, Eye, EyeOff, UserPlus, ShieldCheck, AlertCircle, Spar
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { getErrorMessage } from '@/utils/error';
 
 // Validation Schema
 const registerSchema = z.object({
@@ -37,8 +38,13 @@ export default function RegisterPage() {
             setRegError(null);
             await authRegister(data);
             router.push('/'); // Chuyển về trang chủ khi thành công
-        } catch (err: any) {
-            setRegError('Đăng ký thất bại. Email có thể đã tồn tại hoặc lỗi hệ thống.');
+        } catch (err: unknown) {
+            const message = getErrorMessage(err);
+            if (message.toLowerCase().includes('already')) {
+                setRegError('Email đã tồn tại. Vui lòng dùng email khác.');
+                return;
+            }
+            setRegError('Đăng ký thất bại. Vui lòng thử lại sau.');
         }
     };
 

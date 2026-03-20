@@ -19,7 +19,7 @@ interface ProductCardProps {
 export const ProductCard = ({ product }: ProductCardProps) => {
     const { user } = useAuth();
     const { addToast } = useUIStore();
-    const { addItem } = useCartStore();
+    const { addItem, decrementItem, items } = useCartStore();
     const syncCartItem = useSyncCartItem();
 
     const handleAddToCart = async (e: React.MouseEvent) => {
@@ -31,6 +31,9 @@ export const ProductCard = ({ product }: ProductCardProps) => {
             return;
         }
 
+        const previousQuantity = items.find((item) => item.$id === product.$id)?.quantity || 0;
+        const nextQuantity = previousQuantity + 1;
+
         // Optimistic Update
         addItem(product, 1);
         addToast(`Đã thêm ${product.name} vào giỏ`, "success");
@@ -39,10 +42,13 @@ export const ProductCard = ({ product }: ProductCardProps) => {
             await syncCartItem.mutateAsync({
                 userId: user.$id,
                 productId: product.$id,
-                quantity: 1,
+                quantity: nextQuantity,
                 shop_id: product.shop_id,
+                idempotencyKey: crypto.randomUUID(),
             });
         } catch (err) {
+            decrementItem(product.$id, 1);
+            addToast(`Không thể đồng bộ giỏ hàng cho ${product.name}`, "error");
             console.error('Failed to sync cart:', err);
         }
     };

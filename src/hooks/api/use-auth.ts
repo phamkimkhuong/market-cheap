@@ -1,10 +1,10 @@
 'use client';
 
-import { account } from '@/services/api/client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { UserSchema, type AuthUser, type LoginCredentials, type RegisterCredentials } from '@/types/auth';
+import { type LoginCredentials, type RegisterCredentials } from '@/types/auth';
 import { createLogger } from '@/utils/logger';
-import { ID } from 'appwrite';
+import { authRepository } from '@/services/repositories/auth-repository';
+import { getErrorCode, getErrorMessage } from '@/utils/error';
 
 
 const logger = createLogger('useAuth');
@@ -23,20 +23,11 @@ export const useAuth = () => {
         queryFn: async () => {
             try {
                 logger.info('Fetching current session...');
-                const response = await account.get();
-
-                const result = UserSchema.safeParse(response);
-                if (!result.success) {
-                    logger.error('Zod Validation Failure for Current User:', result.error.format());
-                    // Fallback to original response or throw
-                    return response as any as AuthUser;
-                }
-
-                return result.data;
-            } catch (err: any) {
+                return await authRepository.getCurrentUser();
+            } catch (err: unknown) {
                 // Not logged in is an expected error (Code 401)
-                if (err.code !== 401) {
-                    logger.error('Failed to fetch auth session:', err.message);
+                if (getErrorCode(err) !== 401) {
+                    logger.error('Failed to fetch auth session:', getErrorMessage(err));
                 }
                 return null;
             }
@@ -49,13 +40,9 @@ export const useAuth = () => {
         mutationFn: async ({ email, password }: LoginCredentials) => {
             try {
                 logger.info('Attempting login for:', email);
-                const session = await account.createEmailPasswordSession(email, password);
-                logger.info('Login successful, Session ID:', session.$id);
-                // After login, fetch the user data
-                const userData = await account.get();
-                return userData as any as AuthUser;
-            } catch (err: any) {
-                logger.error('Login failed:', err.message);
+                return await authRepository.login({ email, password });
+            } catch (err: unknown) {
+                logger.error('Login failed:', getErrorMessage(err));
                 throw err;
             }
         },
@@ -70,15 +57,9 @@ export const useAuth = () => {
         mutationFn: async ({ email, password, name }: RegisterCredentials) => {
             try {
                 logger.info('Attempting registration for:', email);
-                const userCreated = await account.create(ID.unique(), email, password, name);
-                logger.info('User created, ID:', userCreated.$id);
-
-                // After registration, log them in
-                await account.createEmailPasswordSession(email, password);
-                const userData = await account.get();
-                return userData as any as AuthUser;
-            } catch (err: any) {
-                logger.error('Registration failed:', err.message);
+                return await authRepository.register({ email, password, name });
+            } catch (err: unknown) {
+                logger.error('Registration failed:', getErrorMessage(err));
                 throw err;
             }
         },
@@ -92,11 +73,11 @@ export const useAuth = () => {
         mutationFn: async () => {
             try {
                 logger.info('Logging out current session...');
-                await account.deleteSession('current');
+                await authRepository.logout();
                 logger.info('Logout successful.');
                 return null;
-            } catch (err: any) {
-                logger.error('Logout failed:', err.message);
+            } catch (err: unknown) {
+                logger.error('Logout failed:', getErrorMessage(err));
                 throw err;
             }
         },

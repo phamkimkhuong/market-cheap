@@ -1,4 +1,5 @@
 import { Client, Account, Databases, Storage, Teams, Messaging } from 'appwrite';
+import { ConfigurationError } from '@/types/errors';
 
 /**
  * Appwrite API Client initialization.
@@ -9,7 +10,7 @@ const endpoint = process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT;
 const projectId = process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID;
 
 if (!endpoint || !projectId) {
-    throw new Error('APPWRITE_ENDPOINT or APPWRITE_PROJECT_ID is missing in environment variables.');
+    throw new ConfigurationError('APPWRITE_ENDPOINT or APPWRITE_PROJECT_ID is missing in environment variables.');
 }
 
 const client = new Client();

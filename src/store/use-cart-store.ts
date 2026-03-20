@@ -14,6 +14,7 @@ interface CartItem extends Product {
 interface CartState {
     items: CartItem[];
     addItem: (product: Product, quantity?: number) => void;
+    decrementItem: (productId: string, quantity?: number) => void;
     removeItem: (productId: string) => void;
     updateQuantity: (productId: string, quantity: number) => void;
     clearCart: () => void;
@@ -45,6 +46,28 @@ export const useCartStore = create<CartState>()(
                         items: [...currentItems, { ...product, quantity }],
                     });
                 }
+            },
+
+            decrementItem: (productId, quantity = 1) => {
+                const currentItems = get().items;
+                const existingItem = currentItems.find((item) => item.$id === productId);
+                if (!existingItem) {
+                    return;
+                }
+
+                const nextQuantity = existingItem.quantity - quantity;
+                if (nextQuantity <= 0) {
+                    set({
+                        items: currentItems.filter((item) => item.$id !== productId),
+                    });
+                    return;
+                }
+
+                set({
+                    items: currentItems.map((item) =>
+                        item.$id === productId ? { ...item, quantity: nextQuantity } : item
+                    ),
+                });
             },
 
             removeItem: (productId) => {

@@ -8,6 +8,7 @@ import { Mail, Lock, Eye, EyeOff, LogIn, Chrome, Apple, AlertCircle, Sparkles } 
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { getErrorMessage } from '@/utils/error';
 
 // Validation Schema
 const loginSchema = z.object({
@@ -32,8 +33,13 @@ export default function LoginPage() {
             setAuthError(null);
             await login(data);
             router.push('/'); // Chuyển về trang chủ khi thành công
-        } catch (err: any) {
-            setAuthError('Email hoặc mật khẩu không chính xác. Vui lòng thử lại.');
+        } catch (err: unknown) {
+            const message = getErrorMessage(err);
+            if (message.toLowerCase().includes('invalid') || message.toLowerCase().includes('password')) {
+                setAuthError('Email hoặc mật khẩu không chính xác. Vui lòng thử lại.');
+                return;
+            }
+            setAuthError('Đăng nhập thất bại. Vui lòng thử lại sau.');
         }
     };
 
