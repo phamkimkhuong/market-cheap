@@ -14,3 +14,13 @@ export const getErrorCode = (error: unknown): number | undefined => {
     }
     return undefined;
 };
+
+export const getErrorType = (error: unknown): string | undefined => {
+    if (typeof error === 'object' && error !== null && 'type' in error) {
+        const type = (error as { type?: unknown }).type;
+        if (typeof type === 'string') {
+            return type;
+        }
+    }
+    return undefined;
+};

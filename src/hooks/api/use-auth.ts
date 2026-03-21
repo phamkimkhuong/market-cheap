@@ -4,7 +4,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { type LoginCredentials, type RegisterCredentials } from '@/types/auth';
 import { createLogger } from '@/utils/logger';
 import { authRepository } from '@/services/repositories/auth-repository';
-import { getErrorCode, getErrorMessage } from '@/utils/error';
+import { getErrorCode, getErrorMessage, getErrorType } from '@/utils/error';
 
 
 const logger = createLogger('useAuth');
@@ -59,7 +59,10 @@ export const useAuth = () => {
                 logger.info('Attempting registration for:', email);
                 return await authRepository.register({ email, password, name });
             } catch (err: unknown) {
-                logger.error('Registration failed:', getErrorMessage(err));
+                logger.error('Registration failed:', getErrorMessage(err), {
+                    code: getErrorCode(err),
+                    type: getErrorType(err),
+                });
                 throw err;
             }
         },

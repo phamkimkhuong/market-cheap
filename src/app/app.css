@@ -28,8 +28,22 @@
 }
 
 @layer base {
+  html {
+    font-size: 100%;
+  }
+
   body {
     @apply bg-bg-main text-text-main font-sans selection:bg-brand/30 antialiased overflow-x-hidden;
+    line-height: 1.5;
+  }
+
+  h1, h2, h3 {
+    line-height: 1.15;
+    text-wrap: balance;
+  }
+
+  p {
+    line-height: 1.6;
   }
 
   /* Glassmorphism Panels */
@@ -78,4 +92,16 @@
 
 .text-gradient {
     @apply bg-clip-text text-transparent bg-gradient-to-r from-brand to-brand-hover;
+}
+
+.fluid-display-xl {
+    font-size: clamp(2rem, 4.2vw, 4.25rem);
+}
+
+.fluid-display-lg {
+    font-size: clamp(1.75rem, 3.2vw, 3rem);
+}
+
+.fluid-title {
+    font-size: clamp(1.5rem, 2vw, 2.25rem);
 }

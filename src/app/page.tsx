@@ -35,7 +35,7 @@ export default function Home() {
     return (
         <div className="space-y-12 lg:space-y-20 pb-20">
             {/* Hero Section - Optimized Responsive */}
-            <section className="relative min-h-[450px] lg:h-[550px] hero-gradient rounded-[var(--radius-pro-2xl)] overflow-hidden group">
+            <section className="relative min-h-[420px] md:min-h-[500px] hero-gradient rounded-[var(--radius-pro-2xl)] overflow-hidden group">
                 <div className="dots-pattern absolute inset-0 group-hover:scale-105 transition-transform duration-1000" />
                 
                 <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-4 sm:px-6 py-12 space-y-6 lg:space-y-8">
@@ -44,7 +44,7 @@ export default function Home() {
                         Sàn TMĐT Thế Hệ Mới 2026
                     </div>
                     
-                    <h1 className="text-4xl md:text-6xl lg:text-7xl font-display font-black text-white leading-[0.95] tracking-tighter italic">
+                    <h1 className="fluid-display-xl font-display font-black text-white tracking-tighter italic">
                         GIÁ RẺ. <br />
                         <span className="text-text-main opacity-90 not-italic">GIAO NHANH.</span>
                     </h1>
@@ -143,7 +143,7 @@ export default function Home() {
                     <div className="dots-pattern absolute inset-0 opacity-10" />
                     <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-8 text-center lg:text-left">
                         <div className="space-y-3">
-                            <h2 className="text-3xl lg:text-4xl font-display font-black text-white italic tracking-tighter">TRỞ THÀNH NGƯỜI BÁN?</h2>
+                            <h2 className="fluid-display-lg font-display font-black text-white italic tracking-tighter">TRỞ THÀNH NGƯỜI BÁN?</h2>
                             <p className="text-white/50 font-bold max-w-sm text-sm lg:text-base">Mở gian hàng ngay hôm nay để tiếp cận 10.000+ khách hàng mỗi ngày.</p>
                         </div>
                         <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">

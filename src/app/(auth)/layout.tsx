@@ -10,7 +10,7 @@ import { ReactNode } from 'react';
  */
 export default function AuthLayout({ children }: { children: ReactNode }) {
     return (
-        <div className="fixed inset-0 z-[100] bg-white flex overflow-hidden">
+        <div className="fixed inset-0 z-[100] bg-white flex overflow-auto">
             {/* Left Side: Brand Experience (Hidden on Mobile) */}
             <div className="hidden lg:flex lg:w-1/2 relative hero-gradient overflow-hidden flex-col justify-between p-16 text-white">
                 <div className="dots-pattern absolute inset-0 opacity-20" />
@@ -30,7 +30,7 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
                         Sàn TMĐT Thế Hệ Mới
                     </div>
                     
-                    <h1 className="text-7xl font-display font-black leading-[0.9] tracking-tighter italic">
+                    <h1 className="fluid-display-xl font-display font-black tracking-tighter italic">
                         TRẢI NGHIỆM <br />
                         <span className="text-text-main opacity-90 not-italic">MUA SẮM SIÊU TỐC.</span>
                     </h1>

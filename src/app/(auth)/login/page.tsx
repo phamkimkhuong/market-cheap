@@ -58,7 +58,7 @@ function LoginPageContent() {
                     <Sparkles size={14} />
                     CHÀO MỪNG TRỞ LẠI
                 </div>
-                <h2 className="text-4xl font-display font-black text-text-main leading-tight tracking-tighter italic">ĐĂNG NHẬP</h2>
+                <h2 className="fluid-title font-display font-black text-text-main tracking-tighter italic">ĐĂNG NHẬP</h2>
                 <p className="text-text-muted font-bold">Hãy nhập thông tin để tiếp tục mua sắm.</p>
             </div>
 

@@ -25,8 +25,12 @@ export const authRepository = {
     },
 
     async register(credentials: RegisterCredentials): Promise<AuthUser> {
-        await account.create(ID.unique(), credentials.email, credentials.password, credentials.name);
-        await account.createEmailPasswordSession(credentials.email, credentials.password);
+        const normalizedEmail = credentials.email.trim().toLowerCase();
+        const normalizedName = credentials.name.trim();
+        const normalizedPassword = credentials.password;
+
+        await account.create(ID.unique(), normalizedEmail, normalizedPassword, normalizedName);
+        await account.createEmailPasswordSession(normalizedEmail, normalizedPassword);
         const user = await account.get();
         return parseOrThrow(UserSchema, user, 'auth.register');
     },

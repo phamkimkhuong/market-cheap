@@ -36,12 +36,25 @@ export default function RegisterPage() {
     const onSubmit = async (data: RegisterFormValues) => {
         try {
             setRegError(null);
-            await authRegister(data);
+            await authRegister({
+                name: data.name.trim(),
+                email: data.email.trim().toLowerCase(),
+                password: data.password,
+            });
             router.push('/'); // Chuyển về trang chủ khi thành công
         } catch (err: unknown) {
             const message = getErrorMessage(err);
-            if (message.toLowerCase().includes('already')) {
+            const normalizedMessage = message.toLowerCase();
+            if (normalizedMessage.includes('already') || normalizedMessage.includes('exists')) {
                 setRegError('Email đã tồn tại. Vui lòng dùng email khác.');
+                return;
+            }
+            if (normalizedMessage.includes('password')) {
+                setRegError('Mật khẩu chưa hợp lệ theo yêu cầu bảo mật.');
+                return;
+            }
+            if (normalizedMessage.includes('email')) {
+                setRegError('Email không hợp lệ hoặc chưa được chấp nhận.');
                 return;
             }
             setRegError('Đăng ký thất bại. Vui lòng thử lại sau.');
@@ -56,7 +69,7 @@ export default function RegisterPage() {
                     <Sparkles size={14} />
                     THÀNH VIÊN MỚI
                 </div>
-                <h2 className="text-4xl font-display font-black text-text-main leading-tight tracking-tighter italic uppercase">ĐĂNG KÝ</h2>
+                <h2 className="fluid-title font-display font-black text-text-main tracking-tighter italic uppercase">ĐĂNG KÝ</h2>
                 <p className="text-text-muted font-bold">Trở thành một phần của cộng đồng mua sắm hiện đại.</p>
             </div>
 
