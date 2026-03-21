@@ -96,6 +96,22 @@ export const useAuth = () => {
         authRepository.loginWithGoogle();
     };
 
+    const sendVerificationEmail = useMutation({
+        mutationFn: async (redirectUrl: string) => {
+            await authRepository.sendEmailVerification(redirectUrl);
+        },
+    });
+
+    const confirmVerification = useMutation({
+        mutationFn: async ({ userId, secret }: { userId: string; secret: string }) => {
+            await authRepository.confirmEmailVerification(userId, secret);
+        },
+        onSuccess: async () => {
+            const current = await authRepository.getCurrentUser();
+            queryClient.setQueryData(QUERY_KEY, current);
+        },
+    });
+
     return {
         user,
         isLoading,
@@ -107,5 +123,9 @@ export const useAuth = () => {
         isRegistering: register.isPending,
         logout: logout.mutateAsync,
         loginWithGoogle,
+        sendVerificationEmail: sendVerificationEmail.mutateAsync,
+        isSendingVerificationEmail: sendVerificationEmail.isPending,
+        confirmVerification: confirmVerification.mutateAsync,
+        isConfirmingVerification: confirmVerification.isPending,
     };
 };

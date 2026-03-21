@@ -24,7 +24,7 @@ const registerSchema = z.object({
 type RegisterFormValues = z.infer<typeof registerSchema>;
 
 export default function RegisterPage() {
-    const { register: authRegister, isRegistering } = useAuth();
+    const { register: authRegister, sendVerificationEmail, isRegistering } = useAuth();
     const router = useRouter();
     const [showPassword, setShowPassword] = useState(false);
     const [regError, setRegError] = useState<string | null>(null);
@@ -41,7 +41,9 @@ export default function RegisterPage() {
                 email: data.email.trim().toLowerCase(),
                 password: data.password,
             });
-            router.push('/'); // Chuyển về trang chủ khi thành công
+            const origin = window.location.origin;
+            await sendVerificationEmail(`${origin}/verify-email`);
+            router.push('/verify-email?status=sent');
         } catch (err: unknown) {
             const message = getErrorMessage(err);
             const normalizedMessage = message.toLowerCase();
@@ -55,6 +57,10 @@ export default function RegisterPage() {
             }
             if (normalizedMessage.includes('email')) {
                 setRegError('Email không hợp lệ hoặc chưa được chấp nhận.');
+                return;
+            }
+            if (normalizedMessage.includes('platform')) {
+                setRegError('Domain hiện tại chưa được khai báo trong Appwrite Platforms.');
                 return;
             }
             setRegError('Đăng ký thất bại. Vui lòng thử lại sau.');

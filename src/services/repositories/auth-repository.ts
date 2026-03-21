@@ -35,6 +35,14 @@ export const authRepository = {
         return parseOrThrow(UserSchema, user, 'auth.register');
     },
 
+    async sendEmailVerification(redirectUrl: string): Promise<void> {
+        await account.createVerification(redirectUrl);
+    },
+
+    async confirmEmailVerification(userId: string, secret: string): Promise<void> {
+        await account.updateVerification(userId, secret);
+    },
+
     async logout(): Promise<void> {
         try {
             await account.deleteSession('current');
