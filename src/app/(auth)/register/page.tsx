@@ -8,7 +8,7 @@ import { User, Mail, Lock, Eye, EyeOff, UserPlus, ShieldCheck, AlertCircle, Spar
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { getErrorMessage } from '@/utils/error';
+import { getErrorCode, getErrorMessage, getErrorType } from '@/utils/error';
 
 // Validation Schema
 const registerSchema = z.object({
@@ -46,6 +46,8 @@ export default function RegisterPage() {
             router.push('/verify-email?status=sent');
         } catch (err: unknown) {
             const message = getErrorMessage(err);
+            const code = getErrorCode(err);
+            const type = getErrorType(err);
             const normalizedMessage = message.toLowerCase();
             if (normalizedMessage.includes('already') || normalizedMessage.includes('exists')) {
                 setRegError('Email đã tồn tại. Vui lòng dùng email khác.');
@@ -61,6 +63,10 @@ export default function RegisterPage() {
             }
             if (normalizedMessage.includes('platform')) {
                 setRegError('Domain hiện tại chưa được khai báo trong Appwrite Platforms.');
+                return;
+            }
+            if (code === 400 && type === 'general_bad_request') {
+                setRegError('Appwrite từ chối request. Hãy kiểm tra: Auth > Settings bật Email/Password + Allow registration, và domain hiện tại đã có trong Platforms.');
                 return;
             }
             setRegError('Đăng ký thất bại. Vui lòng thử lại sau.');

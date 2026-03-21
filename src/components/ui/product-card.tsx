@@ -57,7 +57,11 @@ export const ProductCard = ({ product }: ProductCardProps) => {
         currency: 'VND',
     }).format(product.price);
 
-    const productImage = product.images?.[0] || `https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=600&auto=format&fit=crop`;
+    const firstImage = product.images?.[0];
+    const productImage =
+        typeof firstImage === 'string' && firstImage.trim().startsWith('http')
+            ? firstImage
+            : 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=600&auto=format&fit=crop';
 
     return (
         <div className="group glass-card border-none hover:translate-y-[-8px] transition-all duration-500 overflow-hidden relative">
