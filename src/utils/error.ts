@@ -24,3 +24,24 @@ export const getErrorType = (error: unknown): string | undefined => {
     }
     return undefined;
 };
+
+export const isEmailAlreadyExistsError = (error: unknown): boolean => {
+    if (typeof error !== 'object' || error === null) return false;
+
+    const code = getErrorCode(error);
+    const type = getErrorType(error);
+    const message = getErrorMessage(error).toLowerCase();
+
+    const duplicateTypeMatch =
+        type === 'user_already_exists' ||
+        type === 'user_email_already_exists' ||
+        type === 'user_email_exists';
+
+    const duplicateMessageMatch =
+        message.includes('already exists') ||
+        message.includes('already been used') ||
+        message.includes('email is already') ||
+        message.includes('user already exists');
+
+    return duplicateTypeMatch || (code === 409 && duplicateMessageMatch) || duplicateMessageMatch;
+};

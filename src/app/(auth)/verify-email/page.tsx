@@ -15,6 +15,7 @@ function VerifyEmailContent() {
 
     const [statusMessage, setStatusMessage] = useState<string | null>(null);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const [cooldownSeconds, setCooldownSeconds] = useState(0);
 
     const userId = searchParams.get('userId');
     const secret = searchParams.get('secret');
@@ -43,12 +44,22 @@ function VerifyEmailContent() {
         runVerify();
     }, [confirmVerification, hasVerifyToken, router, secret, userId]);
 
+    useEffect(() => {
+        if (cooldownSeconds <= 0) return;
+        const timer = window.setInterval(() => {
+            setCooldownSeconds((prev) => (prev > 0 ? prev - 1 : 0));
+        }, 1000);
+        return () => window.clearInterval(timer);
+    }, [cooldownSeconds]);
+
     const handleResend = async () => {
+        if (cooldownSeconds > 0) return;
         try {
             setErrorMessage(null);
             const origin = window.location.origin;
             await sendVerificationEmail(`${origin}/verify-email`);
             setStatusMessage('Đã gửi lại email xác thực. Vui lòng kiểm tra hộp thư.');
+            setCooldownSeconds(60);
         } catch (error: unknown) {
             setErrorMessage(getErrorMessage(error));
         }
@@ -92,12 +103,16 @@ function VerifyEmailContent() {
                 <div className="flex flex-col sm:flex-row gap-3">
                     <button
                         type="button"
-                        disabled={!user || isSendingVerificationEmail}
+                        disabled={!user || isSendingVerificationEmail || cooldownSeconds > 0}
                         onClick={handleResend}
                         className="btn-outline h-12 px-6 border-brand/20 bg-white/60 disabled:opacity-50"
                     >
                         <RefreshCcw size={16} />
-                        {isSendingVerificationEmail ? 'Đang gửi...' : 'Gửi lại email xác thực'}
+                        {isSendingVerificationEmail
+                            ? 'Đang gửi...'
+                            : cooldownSeconds > 0
+                              ? `Gửi lại sau ${cooldownSeconds}s`
+                              : 'Gửi lại email xác thực'}
                     </button>
 
                     <Link href="/login" className="btn-primary h-12 px-6 !shadow-none">

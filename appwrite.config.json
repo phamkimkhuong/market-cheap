@@ -1,3 +1,18 @@
 {
-    "projectId": "69991e8a00216d28d1c3"
+    "projectId": "69991e8a00216d28d1c3",
+    "endpoint": "https://sgp.cloud.appwrite.io/v1",
+    "functions": [
+        {
+            "$id": "register-gateway",
+            "name": "register-gateway",
+            "enabled": true,
+            "live": true,
+            "logging": true,
+            "runtime": "node-22",
+            "timeout": 15,
+            "entrypoint": "src/main.js",
+            "commands": "npm install --omit=dev",
+            "path": "functions/register-gateway"
+        }
+    ]
 }

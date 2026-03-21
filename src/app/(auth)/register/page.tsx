@@ -8,7 +8,7 @@ import { User, Mail, Lock, Eye, EyeOff, UserPlus, ShieldCheck, AlertCircle, Spar
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { getErrorCode, getErrorMessage, getErrorType } from '@/utils/error';
+import { getErrorCode, getErrorMessage, getErrorType, isEmailAlreadyExistsError } from '@/utils/error';
 
 // Validation Schema
 const registerSchema = z.object({
@@ -28,13 +28,16 @@ export default function RegisterPage() {
     const router = useRouter();
     const [showPassword, setShowPassword] = useState(false);
     const [regError, setRegError] = useState<string | null>(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const { register, handleSubmit, formState: { errors } } = useForm<RegisterFormValues>({
         resolver: zodResolver(registerSchema),
     });
 
     const onSubmit = async (data: RegisterFormValues) => {
+        if (isSubmitting || isRegistering) return;
         try {
+            setIsSubmitting(true);
             setRegError(null);
             await authRegister({
                 name: data.name.trim(),
@@ -49,7 +52,7 @@ export default function RegisterPage() {
             const code = getErrorCode(err);
             const type = getErrorType(err);
             const normalizedMessage = message.toLowerCase();
-            if (normalizedMessage.includes('already') || normalizedMessage.includes('exists')) {
+            if (isEmailAlreadyExistsError(err)) {
                 setRegError('Email đã tồn tại. Vui lòng dùng email khác.');
                 return;
             }
@@ -70,6 +73,8 @@ export default function RegisterPage() {
                 return;
             }
             setRegError('Đăng ký thất bại. Vui lòng thử lại sau.');
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -181,10 +186,10 @@ export default function RegisterPage() {
 
                     {/* Submit Button */}
                     <button 
-                        disabled={isRegistering}
+                        disabled={isRegistering || isSubmitting}
                         className="btn-primary w-full h-16 text-lg !shadow-none hover:scale-[1.02] active:scale-95 disabled:opacity-50"
                     >
-                        {isRegistering ? (
+                        {isRegistering || isSubmitting ? (
                             <div className="w-6 h-6 border-2 border-white/20 border-t-white rounded-full animate-spin" />
                         ) : (
                             <>

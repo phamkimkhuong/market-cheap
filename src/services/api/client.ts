@@ -1,4 +1,4 @@
-import { Client, Account, Databases, Storage, Teams, Messaging } from 'appwrite';
+import { Client, Account, Databases, Storage, Teams, Messaging, Functions } from 'appwrite';
 import { ConfigurationError } from '@/types/errors';
 
 /**
@@ -23,5 +23,6 @@ export const databases = new Databases(client);
 export const storage = new Storage(client);
 export const teams = new Teams(client);
 export const messaging = new Messaging(client);
+export const appwriteFunctions = new Functions(client);
 
 export default client;
